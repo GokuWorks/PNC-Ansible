@@ -1,0 +1,35 @@
+---
+- name: Make kubeconfig dir
+  ansible.builtin.file:
+    path: ~/.kube/
+    state: directory
+    mode: '0755'
+
+- name: Install curl
+  ansible.builtin.apt:
+    name: curl
+    state: present
+
+- name: Download k3sup binary
+  ansible.builtin.get_url:
+    url: "https://github.com/alexellis/k3sup/releases/download/0.13.8/k3sup" # Replace with the download URL for your architecture
+    dest: /tmp/k3sup
+    mode: "0755"
+
+- name: Install k3sup
+  ansible.builtin.command:
+    cmd: sudo install /tmp/k3sup /usr/local/bin/k3sup
+    creates: /usr/local/bin/k3sup
+
+- name: Install K3s on k3s_master_1
+  ansible.builtin.command:
+    cmd: >
+      k3sup install
+      --cluster
+      --ip {{ hostvars[groups['k3s_masters'][0]].ansible_host }}
+      --local-path ~/.kube/config
+      --k3s-channel latest
+      --no-extras
+      --tls-san {{ vip }}
+      --tls-san {{ cloudflare_zone }}
+      --user {{ user }}

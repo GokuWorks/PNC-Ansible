@@ -1,0 +1,9 @@
+---
+- name: Install k3s on first node
+  ansible.builtin.include_tasks: deploy-k3s-node1.yml
+
+- name: Install kube-vip on k3s
+  ansible.builtin.include_tasks: deploy-kube-vip.yml
+
+- name: Install k3s on other nodes
+  ansible.builtin.include_tasks: deploy-k3s-join.yml

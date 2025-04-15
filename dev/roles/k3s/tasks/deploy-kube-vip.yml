@@ -1,0 +1,59 @@
+---
+- name: Create the /var/lib/rancher/k3s/server/manifests/ directory
+  delegate_to: k3s_master_1
+  ansible.builtin.file:
+    path: /var/lib/rancher/k3s/server/manifests/
+    state: directory
+    mode: '0755'
+
+- name: Download kube-vip rbac.yaml and save to manifests directory
+  delegate_to: k3s_master_1
+  ansible.builtin.get_url:
+    url: https://kube-vip.io/manifests/rbac.yaml
+    dest: /var/lib/rancher/k3s/server/manifests/kube-vip-rbac.yaml
+    mode: '0755'
+
+- name: Apply kube-vip rbac
+  delegate_to: k3s_master_1
+  ansible.builtin.shell:
+    cmd: kubectl apply -f /var/lib/rancher/k3s/server/manifests/kube-vip-rbac.yaml
+
+- name: Configuring kube-vip manifest vars and create
+  delegate_to: k3s_master_1
+  ansible.builtin.shell:
+    cmd: |
+      export VIP={{ vip }}
+      export INTERFACE=eth0
+      KVVERSION=$(curl -sL https://api.github.com/repos/kube-vip/kube-vip/releases | jq -r ".[0].name")
+      alias kube-vip='ctr image pull ghcr.io/kube-vip/kube-vip:$KVVERSION; ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:$KVVERSION vip /kube-vip'
+      kube-vip manifest daemonset \
+      --interface $INTERFACE \
+      --address $VIP \
+      --inCluster \
+      --taint \
+      --controlplane \
+      --services \
+      --arp \
+      --leaderElection
+
+- name: Upload manifest
+  delegate_to: k3s_master_1
+  ansible.builtin.copy:
+    src: manifest.yml
+    dest: /var/lib/rancher/k3s/server/manifests/kube-vip-manifest.yaml
+    owner: kube-admin
+    group: kube-admin
+    mode: '0755'
+
+- name: Apply kube-vip manifest and kube-vip cloud controller manifest
+  delegate_to: k3s_master_1
+  ansible.builtin.shell:
+    cmd: |
+      kubectl apply -f /var/lib/rancher/k3s/server/manifests/kube-vip-manifest.yaml
+      kubectl apply -f https://raw.githubusercontent.com/kube-vip/kube-vip-cloud-provider/main/manifest/kube-vip-cloud-controller.yaml
+
+- name: Create kubevip configmap in kube-system namespace
+  delegate_to: k3s_master_1
+  ansible.builtin.shell:
+    cmd: |
+      kubectl create configmap -n kube-system kubevip --from-literal range-global=10.0.16.11-10.0.16.60

@@ -1,0 +1,9 @@
+---
+- name: Deploy k3s with kube-vip as lb
+  hosts: localhost
+  gather_facts: true
+  become: true
+  vars_files:
+    - vars/config.yml
+  roles:
+    - k3s
