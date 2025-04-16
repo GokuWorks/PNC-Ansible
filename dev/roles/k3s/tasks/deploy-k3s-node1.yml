@@ -31,5 +31,5 @@
       --k3s-channel latest
       --no-extras
       --tls-san {{ vip }}
-      --tls-san {{ cloudflare_zone }}
+      --tls-san {{ cloudflare_fqdn }}
       --user {{ user }}

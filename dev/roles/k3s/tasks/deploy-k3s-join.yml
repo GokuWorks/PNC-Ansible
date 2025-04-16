@@ -9,7 +9,7 @@
       --server
       --server-ip {{ hostvars[groups['k3s_masters'][0]].ansible_host }}
       --tls-san {{ vip }}
-      --tls-san {{ cloudflare_zone }}
+      --tls-san {{ cloudflare_fqdn }}
       --user {{ user }}
 
 - name: Install k3s k3s_master_3
@@ -22,5 +22,5 @@
       --server
       --server-ip {{ hostvars[groups['k3s_masters'][0]].ansible_host }}
       --tls-san {{ vip }}
-      --tls-san {{ cloudflare_zone }}
+      --tls-san {{ cloudflare_fqdn }}
       --user {{ user }}

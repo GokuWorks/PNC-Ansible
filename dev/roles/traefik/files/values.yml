@@ -8,8 +8,7 @@ ports:
 ingressRoute:
   dashboard:
     enabled: true
-    entryPoints: ["websecure"]
-    matchRule: Host(`traefik-dash.{FQDN}`)
+    entryPoints: ["web", "websecure"]
 deployment:
   replicas: null
 resources:

@@ -13,16 +13,16 @@
         chart_ref: traefik/traefik
         release_namespace: traefik
         create_namespace: true
-        values: "{{ lookup('file', role_path + '/files/values.yml') | from_yaml }}"
+        values_files: "{{ role_path + '/files/values.yml' }}"
 
     - name: Apply certificate
       kubernetes.core.k8s:
-        src: "{{ role_path + '/files/traefik-dash-cert.yml' }}"
+        src: "{{ role_path + '/templates/traefik-dash-cert.yml.j2' }}"
         state: present
         apply: true
 
     - name: Apply ingressroute
       kubernetes.core.k8s:
-        src: "{{ role_path + '/files/traefik-dash-ingressroute.yml' }}"
+        src: "{{ role_path + '/templates/traefik-dash-ingressroute.yml.j2' }}"
         state: present
         apply: true

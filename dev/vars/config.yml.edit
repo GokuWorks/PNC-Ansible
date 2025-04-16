@@ -4,4 +4,7 @@ vip: ""
 
 user: ""
 
-cloudflare_zone: "{FQDN}"
+cloudflare_fqdn: ""
+cloudflare_email: ""
+
+traefik_dash_fqdn: ""

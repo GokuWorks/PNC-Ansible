@@ -1,6 +1,6 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
-metadate:
+metadata:
   name: traefik-dash-ingressroute-certificate
   namespace: traefik
 spec:
@@ -9,4 +9,4 @@ spec:
     name: cloudflare-clusterissuer
     kind: ClusterIssuer
   dnsNames:
-    - traefik-dash.{FQDN}
+    - "{{ traefik_dash_fqdn }}"

@@ -45,6 +45,6 @@
 
     - name: Apply clusterissuer
       kubernetes.core.k8s:
-        src: "{{ role_path + '/files/clusterissuer.yml' }}"
+        src: "{{ role_path + '/templates/clusterissuer.yml.j2' }}"
         state: present
         apply: true
