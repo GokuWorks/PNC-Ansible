@@ -1,0 +1,50 @@
+---
+- name: Deploy cert-manager
+  block:
+    - name: Add cert-manager chart repo
+      kubernetes.core.helm_repository:
+        name: jetstack
+        repo_url: "https://charts.jetstack.io"
+
+    - name: Deploy cert-manager chart with values
+      kubernetes.core.helm:
+        update_repo_cache: true
+        name: cert-manager
+        chart_ref: jetstack/cert-manager
+        release_namespace: cert-manager
+        create_namespace: true
+        values: "{{ lookup('file', role_path + '/files/cert-manager-values.yml') | from_yaml }}"
+
+    - name: Create cloudflare api token secret
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Secret
+          type: Opaque
+          metadata:
+            name: cloudflare-api-token-secret
+            namespace: cert-manager
+          data:
+            api-token: "{{ cloudflare_api_token | b64encode }}" # Base64
+      register: cf_api_token_secret
+
+    - name: Create cloudflare api email secret
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Secret
+          type: Opaque
+          metadata:
+            name: cloudflare-api-email-secret
+            namespace: cert-manager
+          data:
+            cloudflare-email: "{{ cloudflare_email | b64encode }}" # Base64
+      register: cf_api_email_secret
+
+    - name: Apply clusterissuer
+      kubernetes.core.k8s:
+        src: "{{ role_path + '/files/clusterissuer.yml' }}"
+        state: present
+        apply: true

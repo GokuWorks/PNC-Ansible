@@ -14,3 +14,15 @@
         release_namespace: traefik
         create_namespace: true
         values: "{{ lookup('file', role_path + '/files/values.yml') | from_yaml }}"
+
+    - name: Apply certificate
+      kubernetes.core.k8s:
+        src: "{{ role_path + '/files/traefik-dash-cert.yml' }}"
+        state: present
+        apply: true
+
+    - name: Apply ingressroute
+      kubernetes.core.k8s:
+        src: "{{ role_path + '/files/traefik-dash-ingressroute.yml' }}"
+        state: present
+        apply: true

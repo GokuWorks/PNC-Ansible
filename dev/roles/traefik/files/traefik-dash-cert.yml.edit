@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadate:
+  name: traefik-dash-ingressroute-certificate
+  namespace: traefik
+spec:
+  secretName: traefik-certificate-secret
+  issuerRef:
+    name: cloudflare-clusterissuer
+    kind: ClusterIssuer
+  dnsNames:
+    - traefik-dash.{FQDN}
