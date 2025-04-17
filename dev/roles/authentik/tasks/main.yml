@@ -1,0 +1,46 @@
+---
+- name: Deploy authentik
+  block:
+    - name: Create values.yml from template
+      ansible.builtin.template:
+        src: templates/auth-values.yml.j2
+        dest: "{{ role_path + '/files/auth-values.yml' }}"
+        mode: '0755'
+
+    - name: Create authentik-cert.yml from template
+      ansible.builtin.template:
+        src: templates/authentik-cert.yml.j2
+        dest: "{{ role_path + '/files/authentik-cert.yml' }}"
+        mode: '0755'
+
+    - name: Create authentik-ingressroute.yml from template
+      ansible.builtin.template:
+        src: templates/authentik-ingressroute.yml.j2
+        dest: "{{ role_path + '/files/authentik-ingressroute.yml' }}"
+        mode: '0755'
+
+    - name: Add authentik chart repo
+      kubernetes.core.helm_repository:
+        name: authentik
+        repo_url: "https://charts.goauthentik.io"
+
+    - name: Deploy authentik chart with values
+      kubernetes.core.helm:
+        update_repo_cache: true
+        name: authentik
+        chart_ref: authentik/authentik
+        release_namespace: authentik
+        create_namespace: true
+        values_files: "{{ role_path + '/files/auth-values.yml' }}"
+
+    - name: Apply certificate
+      kubernetes.core.k8s:
+        src: "{{ role_path + '/files/authentik-cert.yml' }}"
+        state: present
+        apply: true
+
+    - name: Apply ingressroute
+      kubernetes.core.k8s:
+        src: "{{ role_path + '/files/authentik-ingressroute.yml' }}"
+        state: present
+        apply: true

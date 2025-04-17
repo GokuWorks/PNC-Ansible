@@ -9,3 +9,7 @@ cloudflare_fqdn: ""
 cloudflare_email: ""
 
 traefik_dash_fqdn: ""
+
+authentik_dash_fqdn: ""
+auth_secret: "" # openssl rand 40 | base64 -w 0
+auth_pg_pass: "" # openssl rand 40 | base64 -w 0

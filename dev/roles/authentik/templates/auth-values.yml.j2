@@ -1,0 +1,33 @@
+global:
+  namespaceOverride: authentik
+
+authentik:
+  log_level: info
+  secret_key: "{{ auth_secret }}"
+  error_reporting:
+    enabled: false
+  postgresql:
+    password: "{{ auth_pg_pass }}"
+    port: 5432
+  email:
+    port: 597
+    use_tls: true
+
+postgresql:
+  enabled: true
+  auth:
+    password: "{{ auth_pg_pass }}"
+
+redis:
+  enabled: true
+
+server:
+  ingress:
+    ingressClassName: traefik
+    enabled: true
+    hosts:
+      - "{{ authentik_fqdn }}"
+    tls:
+      - secretName: authentik-certificate-secret
+        hosts:
+          - "{{ authentik_fqdn }}"

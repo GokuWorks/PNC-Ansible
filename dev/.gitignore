@@ -5,3 +5,5 @@ auth-values.yml
 clusterissuer.yml
 traefik-dash-cert.yml
 traefik-dash-ingressroute.yml
+authentik-cert.yml
+authentik-ingressroute.yml
