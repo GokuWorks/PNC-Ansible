@@ -4,6 +4,7 @@ vip: ""
 
 user: ""
 
+cloudflare_api_token: ""
 cloudflare_fqdn: ""
 cloudflare_email: ""
 
