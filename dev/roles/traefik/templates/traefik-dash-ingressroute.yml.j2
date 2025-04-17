@@ -7,10 +7,10 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`"{{ traefik_dash_fqdn }}"`)
+    - match: Host(`{{ traefik_dash_fqdn }}`)
       kind: Rule
       services:
         - name: traefik
-          port: 443
+          port: 8080
   tls:
     secretName: traefik-certificate-secret

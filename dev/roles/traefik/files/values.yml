@@ -8,7 +8,7 @@ ports:
 ingressRoute:
   dashboard:
     enabled: true
-    entryPoints: ["web", "websecure"]
+    entryPoints: ["websecure"]
 deployment:
   replicas: null
 resources:
