@@ -1,6 +1,18 @@
 ---
 - name: Deploy traefik
   block:
+    - name: Create traefik-dash-cert.yml from template
+      ansible.builtin.template:
+        src: templates/traefik-dash-cert.yml.j2
+        dest: "{{ role_path + '/files/traefik-dash-cert.yml' }}"
+        mode: '0755'
+
+    - name: Create traefik-dash-ingressroute.yml from template
+      ansible.builtin.template:
+        src: templates/traefik-dash-ingressroute.yml.j2
+        dest: "{{ role_path + '/files/traefik-dash-ingressroute.yml' }}"
+        mode: '0755'
+
     - name: Add traefik chart repo
       kubernetes.core.helm_repository:
         name: traefik
@@ -17,12 +29,12 @@
 
     - name: Apply certificate
       kubernetes.core.k8s:
-        src: "{{ role_path + '/templates/traefik-dash-cert.yml.j2' }}"
+        src: "{{ role_path + '/files/traefik-dash-cert.yml' }}"
         state: present
         apply: true
 
     - name: Apply ingressroute
       kubernetes.core.k8s:
-        src: "{{ role_path + '/templates/traefik-dash-ingressroute.yml.j2' }}"
+        src: "{{ role_path + '/files/traefik-dash-ingressroute.yml' }}"
         state: present
         apply: true

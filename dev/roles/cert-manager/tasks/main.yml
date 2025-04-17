@@ -1,6 +1,12 @@
 ---
 - name: Deploy cert-manager
   block:
+    - name: Create clusterissuer.yml from template
+      ansible.builtin.template:
+        src: templates/clusterissuer.yml.j2
+        dest: "{{ role_path + '/files/clusterissuer.yml' }}"
+        mode: '0755'
+
     - name: Add cert-manager chart repo
       kubernetes.core.helm_repository:
         name: jetstack
@@ -45,6 +51,6 @@
 
     - name: Apply clusterissuer
       kubernetes.core.k8s:
-        src: "{{ role_path + '/templates/clusterissuer.yml.j2' }}"
+        src: "{{ role_path + '/files/clusterissuer.yml' }}"
         state: present
         apply: true
