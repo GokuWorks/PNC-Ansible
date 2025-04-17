@@ -7,7 +7,13 @@
         dest: "{{ role_path + '/files/traefik-dash-cert.yml' }}"
         mode: '0755'
 
-    - name: Create traefik-dash-ingressroute.yml from template
+    - name: Create traefik-values.yml from template
+      ansible.builtin.template:
+        src: templates/traefik-values.yml.j2
+        dest: "{{ role_path + '/files/traefik-values.yml' }}"
+        mode: '0755'
+
+    - name: Create traefik-middleware.yml from template
       ansible.builtin.template:
         src: templates/traefik-dash-ingressroute.yml.j2
         dest: "{{ role_path + '/files/traefik-dash-ingressroute.yml' }}"
@@ -25,7 +31,7 @@
         chart_ref: traefik/traefik
         release_namespace: traefik
         create_namespace: true
-        values_files: "{{ role_path + '/files/values.yml' }}"
+        values_files: "{{ role_path + '/files/traefik-values.yml' }}"
 
     - name: Apply certificate
       kubernetes.core.k8s:

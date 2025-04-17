@@ -9,6 +9,7 @@ ingressRoute:
   dashboard:
     enabled: true
     entryPoints: ["websecure"]
+    matchRule: Host(`{{ traefik_dash_fqdn }}`)
 deployment:
   replicas: null
 resources:

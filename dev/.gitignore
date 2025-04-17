@@ -1,9 +1,10 @@
 ssh_key
 inventory.ini
 config.yml
-auth-values.yml
 clusterissuer.yml
+traefik-values.yml
 traefik-dash-cert.yml
-traefik-dash-ingressroute.yml
+traefik-middleware.yml
+auth-values.yml
 authentik-cert.yml
 authentik-ingressroute.yml
