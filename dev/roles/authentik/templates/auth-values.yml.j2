@@ -25,6 +25,7 @@ server:
   ingress:
     ingressClassName: traefik
     enabled: true
+    https: true
     hosts:
       - "{{ authentik_fqdn }}"
     tls:
