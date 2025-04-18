@@ -15,8 +15,8 @@
 
     - name: Create traefik-middleware.yml from template
       ansible.builtin.template:
-        src: templates/traefik-dash-ingressroute.yml.j2
-        dest: "{{ role_path + '/files/traefik-dash-ingressroute.yml' }}"
+        src: templates/traefik-middleware.yml.j2
+        dest: "{{ role_path + '/files/traefik-middleware.yml' }}"
         mode: '0755'
 
     - name: Add traefik chart repo
@@ -39,8 +39,8 @@
         state: present
         apply: true
 
-    - name: Apply ingressroute
+    - name: Apply middleware
       kubernetes.core.k8s:
-        src: "{{ role_path + '/files/traefik-dash-ingressroute.yml' }}"
+        src: "{{ role_path + '/files/traefik-middleware.yml' }}"
         state: present
         apply: true

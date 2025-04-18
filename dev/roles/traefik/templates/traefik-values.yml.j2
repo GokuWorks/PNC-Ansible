@@ -10,6 +10,8 @@ ingressRoute:
     enabled: true
     entryPoints: ["websecure"]
     matchRule: Host(`{{ traefik_dash_fqdn }}`)
+    middlewares:
+      - name: traefik-dash-middleware
 deployment:
   replicas: null
 resources:
