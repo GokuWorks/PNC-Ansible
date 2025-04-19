@@ -13,3 +13,6 @@ traefik_dash_fqdn: ""
 authentik_dash_fqdn: ""
 auth_secret: "" # openssl rand 40 | base64 -w 0
 auth_pg_pass: "" # openssl rand 40 | base64 -w 0
+
+rancher_admin_pass: ""
+rancher_fqdn: ""

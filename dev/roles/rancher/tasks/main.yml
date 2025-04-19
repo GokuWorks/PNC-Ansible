@@ -1,0 +1,34 @@
+---
+- name: Deploy rancher
+  block:
+    - name: Create rancher-cert.yml from template
+      ansible.builtin.template:
+        src: templates/rancher-cert.yml.j2
+        dest: "{{ role_path + '/files/rancher-cert.yml' }}"
+        mode: '0755'
+
+    - name: Create rancher-values.yml from template
+      ansible.builtin.template:
+        src: templates/rancher-values.yml.j2
+        dest: "{{ role_path + '/files/rancher-values.yml' }}"
+        mode: '0755'
+
+    - name: Add rancher chart repo
+      kubernetes.core.helm_repository:
+        name: rancher
+        repo_url: "https://releases.rancher.com/server-charts/latest"
+
+    - name: Deploy rancher chart with values
+      kubernetes.core.helm:
+        update_repo_cache: true
+        name: rancher
+        chart_ref: rancher/rancher
+        release_namespace: cattle-system
+        create_namespace: true
+        values_files: "{{ role_path + '/files/rancher-values.yml' }}"
+
+    - name: Apply certificate
+      kubernetes.core.k8s:
+        src: "{{ role_path + '/files/rancher-cert.yml' }}"
+        state: present
+        apply: true

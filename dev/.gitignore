@@ -9,3 +9,5 @@ traefik-ingress.yml
 auth-values.yml
 authentik-cert.yml
 authentik-ingressroute.yml
+rancher-values.yml
+rancher-cert.yml

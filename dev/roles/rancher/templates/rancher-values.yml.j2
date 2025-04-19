@@ -1,0 +1,13 @@
+bootstrapPassword: "{{ rancher_admin_pass }}"
+hostname: " {{ rancher_fqdn }}"
+
+ingress:
+  enabled: true
+  ingressClassName: "traefik"
+  servicePort: 80
+  tls:
+    source: secret
+    secretName: rancher-certificate-secret
+
+service:
+  disableHTTP: false
