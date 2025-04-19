@@ -1,0 +1,18 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dash-ingressroute
+  namespace: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`{{ traefik_dash_fqdn }}`)
+      kind: Rule
+      services:
+        - kind: TraefikService
+          name: api@internal
+      # middlewares:
+        # - name: traefik-dash-middleware
+  tls:
+    secretName: traefik-certificate-secret

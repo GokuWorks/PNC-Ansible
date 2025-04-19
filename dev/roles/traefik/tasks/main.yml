@@ -7,6 +7,12 @@
         dest: "{{ role_path + '/files/traefik-dash-cert.yml' }}"
         mode: '0755'
 
+    - name: Create traefik-ingress.yml from template
+      ansible.builtin.template:
+        src: templates/traefik-ingress.yml.j2
+        dest: "{{ role_path + '/files/traefik-ingress.yml' }}"
+        mode: '0755'
+
     - name: Create traefik-values.yml from template
       ansible.builtin.template:
         src: templates/traefik-values.yml.j2
@@ -36,6 +42,12 @@
     - name: Apply certificate
       kubernetes.core.k8s:
         src: "{{ role_path + '/files/traefik-dash-cert.yml' }}"
+        state: present
+        apply: true
+
+    - name: Apply ingress
+      kubernetes.core.k8s:
+        src: "{{ role_path + '/files/traefik-ingress.yml' }}"
         state: present
         apply: true
 

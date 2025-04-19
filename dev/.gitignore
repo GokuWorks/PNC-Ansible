@@ -5,6 +5,7 @@ clusterissuer.yml
 traefik-values.yml
 traefik-dash-cert.yml
 traefik-middleware.yml
+traefik-ingress.yml
 auth-values.yml
 authentik-cert.yml
 authentik-ingressroute.yml
