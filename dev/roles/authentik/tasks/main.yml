@@ -13,12 +13,6 @@
         dest: "{{ role_path + '/files/authentik-cert.yml' }}"
         mode: '0755'
 
-    - name: Create authentik-ingressroute.yml from template
-      ansible.builtin.template:
-        src: templates/authentik-ingressroute.yml.j2
-        dest: "{{ role_path + '/files/authentik-ingressroute.yml' }}"
-        mode: '0755'
-
     - name: Add authentik chart repo
       kubernetes.core.helm_repository:
         name: authentik
@@ -36,11 +30,5 @@
     - name: Apply certificate
       kubernetes.core.k8s:
         src: "{{ role_path + '/files/authentik-cert.yml' }}"
-        state: present
-        apply: true
-
-    - name: Apply ingressroute
-      kubernetes.core.k8s:
-        src: "{{ role_path + '/files/authentik-ingressroute.yml' }}"
         state: present
         apply: true
