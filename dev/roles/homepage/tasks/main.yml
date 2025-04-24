@@ -1,0 +1,34 @@
+---
+- name: Deploy homepage
+  block:
+    - name: Create homepage-cert.yml from template
+      ansible.builtin.template:
+        src: templates/homepage-cert.yml.j2
+        dest: "{{ role_path + '/files/homepage-cert.yml' }}"
+        mode: '0755'
+
+    - name: Create homepage-values.yml from template
+      ansible.builtin.template:
+        src: templates/homepage-values.yml.j2
+        dest: "{{ role_path + '/files/homepage-values.yml' }}"
+        mode: '0755'
+
+    - name: Add homepage chart repo
+      kubernetes.core.helm_repository:
+        name: homepage
+        repo_url: "https://github.com/M0NsTeRRR/helm-charts/tree/main/charts/homepage"
+
+    - name: Deploy homepage chart with values
+      kubernetes.core.helm:
+        update_repo_cache: true
+        name: homepage
+        chart_ref: homepage/homepage
+        release_namespace: homepage
+        create_namespace: true
+        values_files: "{{ role_path + '/files/homepage-values.yml' }}"
+
+    - name: Apply certificate
+      kubernetes.core.k8s:
+        src: "{{ role_path + '/files/homepage-cert.yml' }}"
+        state: present
+        apply: true

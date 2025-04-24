@@ -1,0 +1,12 @@
+ingress:
+  enabled: true
+  ingressClassName: "homepage"
+  hosts:
+    - host: [[ homepage_fqdn ]]
+  tls: []
+    - secretName: homepage-certificate-secret
+      hosts:
+        - [[ homepage_fqdn ]]
+
+nodeSelector: {}
+affinity: {}

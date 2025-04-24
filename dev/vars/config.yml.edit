@@ -16,3 +16,5 @@ auth_pg_pass: "" # openssl rand 40 | base64 -w 0
 
 rancher_admin_pass: ""
 rancher_fqdn: ""
+
+homepage_fqdn: ""

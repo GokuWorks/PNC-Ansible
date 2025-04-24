@@ -11,4 +11,6 @@ authentik-cert.yml
 authentik-ingressroute.yml
 rancher-values.yml
 rancher-cert.yml
+homepage-values.yml
+homepage-cert.yml
 misc/
